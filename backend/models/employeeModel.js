@@ -4,9 +4,8 @@ const employeeSchema = new Schema({
     name: {type: String, required: true},    
     password: {type: String , required: true},
     avatar: {type: String},
-    company: {type: String},
-    team: {type: String},
-    role: {type: String},
+    designation: {type: String},
+    employerId: {type: Schema.Types.ObjectId, ref: 'UserCollection'},
     createdAt: {type: Date, default: Date.now},
 });
 module.exports = model('EmployeeCollection', employeeSchema);
