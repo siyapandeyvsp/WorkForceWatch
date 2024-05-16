@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { AppProvider } from '@/context/AppContext'
-import App from 'next/app'
-import React from 'react'
+import { AppProvider } from "@/context/AppContext";
+import { TaskProvider } from "@/context/TaskContext";
+import App from "next/app";
+import React from "react";
 
-const Template = ({children}) => {
+const Template = ({ children }) => {
   return (
-   <AppProvider>
-
-    {children}
+    <AppProvider>
+      <TaskProvider>{children}</TaskProvider>
     </AppProvider>
-  )
-}
+  );
+};
 
-export default Template
+export default Template;

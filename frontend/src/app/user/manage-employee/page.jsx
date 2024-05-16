@@ -17,19 +17,10 @@ const ManageEmployee = () => {
         <AddUserForm/>
       </Drawer>
 
-      <Button onClick={open}>Open Drawer</Button>
+      <Button onClick={open}>Add Employee</Button>
             
           </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 4 }}>
-            <Button color="teal" onClick={() => console.log("Update Employee")}>
-              Update Employee
-            </Button>
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 4 }}>
-            <Button color="red" onClick={() => console.log("Delete Employee")}>
-              Delete Employee
-            </Button>
-          </Grid.Col>
+          
         </Grid>
       </Paper>
       <Paper padding="md" shadow="xs" mt="md">

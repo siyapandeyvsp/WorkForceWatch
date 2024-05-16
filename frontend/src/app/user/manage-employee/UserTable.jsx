@@ -1,8 +1,10 @@
+"use client";
 import { Avatar, Badge, Table, Group, Text, ActionIcon, Anchor, rem } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { useState , useEffect} from 'react';
-
+import { useRouter } from 'next/navigation';
+import { IconEye } from '@tabler/icons-react';
 
 // const jobColors = {
 //   engineer: 'blue',
@@ -11,7 +13,9 @@ import { useState , useEffect} from 'react';
 // };
 
 export function UsersTable() {
-    const [employeeList,setEmployeeList] = useState([]);
+  
+  const router = useRouter();
+  const [employeeList,setEmployeeList] = useState([]);
     const readEmployees = () => {
         fetch("http://localhost:5000/employee/getall")
           .then((res) => {
@@ -79,6 +83,9 @@ export function UsersTable() {
       </Table.Td>
       <Table.Td>
         <Group gap={0} justify="flex-end">
+        <ActionIcon variant="subtle" color="gray" onClick={() => router.push(`/user/view-employee/${employee._id}`)}>
+          <IconEye style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+        </ActionIcon>
           <ActionIcon variant="subtle" color="gray">
             <IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
           </ActionIcon>

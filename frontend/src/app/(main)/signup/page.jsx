@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { TextInput, Checkbox, Button, Group, Box, FileInput } from '@mantine/core';
+import { TextInput, Checkbox, Button, Group, Box, FileInput, PasswordInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 const Signup = () => {
@@ -13,6 +13,7 @@ const Signup = () => {
       logo: '',
       cover: '',
       address: '',
+      password:''
     },
 
     validate: {
@@ -22,7 +23,7 @@ const Signup = () => {
 
   const signupSubmit= (values) => {
     console.log(values);
-    fetch('http://localhost:5000/company/add',{
+    fetch('http://localhost:5000/user/add',{
       method:'POST',
       body:JSON.stringify(values),
       headers:{
@@ -84,6 +85,11 @@ const Signup = () => {
           label="Address"
           placeholder="Enter your address"
           {...form.getInputProps('address')}
+        />
+        <PasswordInput 
+        label="password"
+        placeholder='password'
+        {...form.getInputProps('password')}
         />
 
         <Checkbox

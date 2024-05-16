@@ -16,8 +16,10 @@ import classes from "./AuthenticationTitle.module.css";
 import { useForm } from "@mantine/form";
 import React from "react";
 import  useAppContext  from "@/context/AppContext";
+import { useRouter } from "next/navigation";
+import { notifications } from "@mantine/notifications";
 const Login = () => {
-
+const router=useRouter();
   const {axiosInstance}= useAppContext();
   const form = useForm({
     initialValues: {
@@ -42,18 +44,37 @@ const Login = () => {
       }
     }).then((response) => {
       console.log(response.status);
-      return response.json();
+      if(response.status === 200){
+        console.log(response.data)
+        console.log("Login successful");
+        notifications.show({title:'Success', message:'Login Successfull'})
+        sessionStorage.setItem('user', JSON.stringify(response.data));
+        router.push('user/manage-employee')
+      }
       
     }).catch((err) => {
       console.log(err);
+      notifications.show({ title: 'Error', message: err });
+
     });
     
   };
   return (
-    <Container size={420} my={40}>
-      <Title ta="center" className={classes.title}>
+    <Container fluid  size={900}>
+       <h1 className={classes.title}>
+              <Text
+               
+                variant="gradient"
+                ta="center"
+                gradient={{ from: "blue", to: "cyan" }}
+                inherit
+              >
+              Login
+              </Text>{" "}
+            </h1>
+      {/* <Title ta="center" className={classes.title}>
         Welcome back!
-      </Title>
+      </Title> */}
       <Text c="dimmed" size="sm" ta="center" mt={5}>
         Do not have an account yet?{" "}
         <Anchor size="sm" component="button">

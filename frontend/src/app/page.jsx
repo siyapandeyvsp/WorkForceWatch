@@ -1,23 +1,29 @@
-import { Container, Text, Button, Group } from '@mantine/core';
+import { Container, Text, Button, Group, Stack, Image } from "@mantine/core";
 // import { GithubIcon } from '@mantinex/dev-icons';
-import classes from './page.module.css';
-import { Icon3dRotate } from '@tabler/icons-react';
-
+import classes from "./page.module.css";
+import { Icon3dRotate } from "@tabler/icons-react";
+import Login from "./(main)/login/page";
 export default function Home() {
   return (
-    <div className={classes.wrapper}>
-      <Container size={'xl'} className={classes.inner}>
-        <h1 className={classes.title}>
-         
-          <Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} inherit>
-            WorkForce Watch
-          </Text>{' '}
-        </h1>
+    <div>
+      <Container className={classes.wrapper} fluid p={70}>
+        <Group fluid>
+          <Stack>
+            <h1 className={classes.title}>
+              <Text
+                component="span"
+                variant="gradient"
+                gradient={{ from: "blue", to: "cyan" }}
+                inherit
+              >
+                WorkForce Watch
+              </Text>{" "}
+            </h1>
 
-        
+            <Image src={"wfh.jpg"} w={500} />
 
-        <Group className={classes.controls}>
-          <Button
+            <Group className={classes.controls}>
+              {/* <Button
             size="xl"
             className={classes.control}
             variant="gradient"
@@ -36,6 +42,10 @@ export default function Home() {
           >
             GitHub
           </Button>
+           */}
+            </Group>
+          </Stack>
+          <Login />
         </Group>
       </Container>
     </div>

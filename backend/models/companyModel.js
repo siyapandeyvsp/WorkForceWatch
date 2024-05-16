@@ -4,7 +4,8 @@ const companySchema = new Schema({
     description:{type: String, required: true},
     logo: {type: String},
     cover: {type: String},
-    address: {type: String},    
+    address: {type: String},
+    password:{type:String},    
     createdAt: {type: Date, default: Date.now},
 });
 module.exports = model('companyCollection', companySchema);

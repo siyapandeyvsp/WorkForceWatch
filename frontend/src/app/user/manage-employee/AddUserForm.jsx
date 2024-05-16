@@ -12,7 +12,6 @@ const AddUserForm = () => {
       password: '',
       avatar: '',
     designation: '',
-
     },
 
     validate: {
@@ -67,7 +66,7 @@ placeholder="Enter your password"
 {...form.getInputProps('password')}
 />
 
-<FileInput
+<TextInput
           label="Avatar"
           placeholder="Upload Avatar"
           {...form.getInputProps('avatar')}
