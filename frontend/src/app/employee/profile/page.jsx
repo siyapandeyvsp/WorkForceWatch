@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import { Paper, TextInput, Avatar, Button, Container, Tabs } from '@mantine/core';
 
 const EmployeeProfile = () => {
-  const [employee, setEmployee] = useState({
-    name: 'Lola',
-    designation: 'HR',
-    email: 'lola@gmail.com',
-    avatar: 'https://img.freepik.com/premium-photo/minimal-japanese-kawaii-gamer-girl-chibi-anime-vector-art-sticker-with-clean-bold-line-cute-simple_655090-9168.jpg'
-  });
+  const [employee, setEmployee] = useState(JSON.parse(sessionStorage.getItem('employee')));  console.log("currentEmployee is ",sessionStorage.getItem('employee'));
+ 
+  // const [employee, setEmployee] = useState({
+  //   name: 'Lola',
+  //   designation: 'HR',
+  //   email: 'lola@gmail.com',
+  //   avatar: 'https://img.freepik.com/premium-photo/minimal-japanese-kawaii-gamer-girl-chibi-anime-vector-art-sticker-with-clean-bold-line-cute-simple_655090-9168.jpg'
+  // });
 
   const handleInputChange = (event) => {
     setEmployee({

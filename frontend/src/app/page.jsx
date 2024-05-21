@@ -3,6 +3,7 @@ import { Container, Text, Button, Group, Stack, Image } from "@mantine/core";
 import classes from "./page.module.css";
 import { Icon3dRotate } from "@tabler/icons-react";
 import Login from "./(main)/login/page";
+import EmployeeLogin from "./employee-login/page";
 export default function Home() {
   return (
     <div>
@@ -46,6 +47,7 @@ export default function Home() {
             </Group>
           </Stack>
           <Login />
+          <EmployeeLogin/>
         </Group>
       </Container>
     </div>

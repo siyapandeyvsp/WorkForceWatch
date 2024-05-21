@@ -6,6 +6,7 @@ const companyRouter = require("./routers/companyRouter");
 const taskRouter = require("./routers/taskRouter");
 const assignmentRouter=require("./routers/assignmentRouter");
 const workSessionRouter = require("./routers/workSessionRouter");
+const utilRouter = require("./routers/util");
 
 const app = express();
 const port = 5000;
@@ -27,6 +28,10 @@ app.use("/company", companyRouter);
 app.use("/task", taskRouter);
 app.use("/assignment",assignmentRouter);
 app.use("/work-session", workSessionRouter);
+app.use("/util", utilRouter);
+
+app.use(express.static("./static/uploads"));
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

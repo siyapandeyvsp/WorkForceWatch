@@ -26,7 +26,7 @@ export default function Layout({ children }) {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">
-        <NavbarSimple /> {/* use the NavbarSimple component */}
+        <NavbarSimple userType='user' /> {/* use the NavbarSimple component */}
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
     </AppShell>

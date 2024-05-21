@@ -18,6 +18,7 @@ import React from "react";
 import  useAppContext  from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import { notifications } from "@mantine/notifications";
+import Link from "next/link";
 const Login = () => {
 const router=useRouter();
   const {axiosInstance}= useAppContext();
@@ -69,18 +70,20 @@ const router=useRouter();
                 gradient={{ from: "blue", to: "cyan" }}
                 inherit
               >
-              Login
+             User Login
               </Text>{" "}
             </h1>
       {/* <Title ta="center" className={classes.title}>
         Welcome back!
       </Title> */}
-      <Text c="dimmed" size="sm" ta="center" mt={5}>
-        Do not have an account yet?{" "}
-        <Anchor size="sm" component="button">
-          Create account
-        </Anchor>
-      </Text>
+    <Text c="dimmed" size="sm" ta="center" mt={5}>
+  Do not have an account yet?{" "}
+  <Link href="/signup">
+    <Anchor size="sm" component="button">
+      Create account
+    </Anchor>
+  </Link>
+</Text>
       <form onSubmit={form.onSubmit(loginSubmit)}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <TextInput

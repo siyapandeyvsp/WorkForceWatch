@@ -22,6 +22,7 @@ import {
 import AddTaskForm from "../../manage-tasks/AddTaskForm";
 import TaskCard from "@/components/TaskCard";
 import TaskList from "../../manage-tasks/TaskList";
+import WorkSessionTable from "@/components/WorkSessionTable";
 
 const ViewEmployee = () => {
   const [employee, setEmployee] = useState({});
@@ -30,7 +31,7 @@ const ViewEmployee = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [tasks, setTasks] = useState([]);
-
+const [workSessions, setWorkSessions] = useState([{}]);
   const { id } = useParams();
 
   const { axiosInstance } = useAppContext();
@@ -58,6 +59,18 @@ const ViewEmployee = () => {
   
     fetchAssignments();
   }, [id]);
+
+
+  useEffect(() => {
+    const fetchEmployeeSessions = async () => {
+      const response = await axiosInstance.get(`/work-session/getbyemployee/${id}`);
+      console.log(response.data);
+      setWorkSessions(response.data);
+    };
+
+    fetchEmployeeSessions();
+  }, [id]);
+
 
 
   const options = data.map((item) => (
@@ -182,12 +195,22 @@ const ViewEmployee = () => {
       <Stack >
         <Paper p={10} shadow="xl" overflow='auto'>
         <Title order={4} ta="center" >Tasks </Title>
-        <Stack>
+        <Group>
         {/* {tasks.map(task => <TaskCard key={task._id} task={task} />)} */}
         {tasks.map(({task, createdAt}) => <TaskCard key={task._id} task={task} />)}
-        </Stack>
+        </Group>
         </Paper>
       </Stack>
+      <Stack >
+        <Paper p={10} shadow="xl" overflow='auto'>
+          <Title order={4} ta="center" >Tasks </Title>
+          <Group>
+            {tasks.map(({task, createdAt}) => <TaskCard key={task._id} task={task} />)}
+          </Group>
+        </Paper>
+        <WorkSessionTable workSessions={workSessions} /> {/* Add this line */}
+      </Stack>
+
       </Group>
     </Paper>
   );

@@ -18,24 +18,24 @@ export const RecordWebcam = () => {
     await stopRecording(recording.id);
     await downloadRecording(recording.id); // Download the recording
   };
-//   // Upload the blob to a back-end
-//   const formData = new FormData();
-//   formData.append("file", recorded.blob, "recorded.webm");
+  // Upload the blob to a back-end
+  const formData = new FormData();
+  formData.append("file", recorded.blob, "recorded.webm");
 
-//   const response = fetch("https://your-backend-url.com/upload", {
-//     method: "POST",
-//     body: formData,
-//   });
+  const response = fetch("https://your-backend-url.com/upload", {
+    method: "POST",
+    body: formData,
+  });
 
   return (
     <div>
       <button onClick={recordVideo}>Record Video</button>;
-      {/* {activeRecordings.map((recording) => (
+      {activeRecordings.map((recording) => (
         <div key={recording.id}>
           <video ref={recording.webcamRef} autoPlay />
           <video ref={recording.previewRef} autoPlay loop />
         </div>
-      ))} */}
+      ))}
     </div>
   );
 };
@@ -74,4 +74,4 @@ export const RecordWebcam = () => {
 //   );
 // };
 
-// export default RecordWebcam;
+export default RecordWebcam;

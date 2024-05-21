@@ -47,6 +47,7 @@ export default function Record() {
       await new Promise((resolve) => setTimeout(resolve, 3000));
       await stopRecording(recording.id);
       await closeCamera(recording.id);
+      console.log(recording);
     } catch (error) {
       console.log({ error });
     }

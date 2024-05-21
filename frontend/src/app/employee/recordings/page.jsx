@@ -6,8 +6,8 @@ import React from 'react'
 const RecordingSettings = () => {
   return (
     <div>
-        <Title> Screen Recording Settings</Title>
-        <ScreenRecorder/>
+        {/* <Title> Screen Recording Settings</Title>
+        <ScreenRecorder/> */}
         <Title>Webcam Recorder Settings </Title>
         <Record/>
         </div>

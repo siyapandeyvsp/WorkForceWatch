@@ -1,3 +1,4 @@
+"use client";
 import { useState } from 'react';
 import { Group, Code } from '@mantine/core';
 import {
@@ -13,16 +14,19 @@ import { MantineLogo } from '@mantinex/mantine-logo';
 import classes from './NavbarSimple.module.css';
 import { useRouter } from 'next/navigation';
 import ScreenRecorder from '@/utils/ScreenRecorder';
-const data = [
+const userNav = [
   { link: '/user/manage-employee', label: 'Manage Employees', icon: IconUsersGroup },
   { link: '/user/manage-tasks', label: 'Manage Tasks ', icon: IconChecklist },
- {link:'/employee/profile',label:' Employee Profile',icon:IconUser},
- {link:'/employee',label:'Employee Dashboard',icon:IconDashboard}
-];
 
-export function NavbarSimple() {
+];
+const employeeNav=[
+  {link:'/employee/profile',label:' Employee Profile',icon:IconUser},
+  {link:'/employee',label:'Employee Dashboard',icon:IconDashboard}
+]
+export function NavbarSimple({userType}) {
   const [active, setActive] = useState('Billing');
 const router=useRouter();
+  const data = userType === 'user' ? userNav : employeeNav;
   const links = data.map((item) => (
     <a
       className={classes.link}
