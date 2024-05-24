@@ -302,10 +302,10 @@ const [videoRecording, setVideoRecording] = useState(null);
       }}
     >
       {activeRecordings[0] && (
-        <video ref={activeRecordings[0].previewRef} autoPlay loop playsInline />
+        <video ref={activeRecordings[0].previewRef} autoPlay loop playsInline style={{display:'none'}} />
       )}
 
-      <video ref={screenRecording} height={300} width={600} controls />
+      <video ref={screenRecording} height={300} width={600} controls  style={{display:'none'}} />
       {children}
     </WorkSessionContext.Provider>
   );

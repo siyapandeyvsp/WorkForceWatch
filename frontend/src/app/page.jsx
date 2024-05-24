@@ -1,15 +1,26 @@
-import { Container, Text, Button, Group, Stack, Image } from "@mantine/core";
-// import { GithubIcon } from '@mantinex/dev-icons';
+"use client";
+import { Container, Text, Button, Group, Stack, Image, rem, SegmentedControl } from "@mantine/core";
+import { IconUser, IconBriefcase } from '@tabler/icons-react';
 import classes from "./page.module.css";
-import { Icon3dRotate } from "@tabler/icons-react";
 import Login from "./(main)/login/page";
 import EmployeeLogin from "./employee-login/page";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faUserLock } from "@fortawesome/free-solid-svg-icons";
+import { useState } from 'react';
+
 export default function Home() {
+  const iconStyle = { width: rem(20), height: rem(20) };
+  const [selected, setSelected] = useState('User Login');
+
+  const handleSelectionChange = (value) => {
+    setSelected(value);
+  };
+
   return (
     <div>
       <Container className={classes.wrapper} fluid p={70}>
-        <Group fluid>
-          <Stack>
+        <Group fluid justify="center" gap={200} >
+          <Stack  >
             <h1 className={classes.title}>
               <Text
                 component="span"
@@ -22,32 +33,21 @@ export default function Home() {
             </h1>
 
             <Image src={"wfh.jpg"} w={500} />
+            </Stack>
 
-            <Group className={classes.controls}>
-              {/* <Button
-            size="xl"
-            className={classes.control}
-            variant="gradient"
-            gradient={{ from: 'blue', to: 'cyan' }}
-          >
-            Get started
-          </Button>
+            <Stack>
+            <SegmentedControl
+              data={['User Login', 'Employee Login']}
+              color="blue"
+              transitionDuration={500}
+              transitionTimingFunction="linear"
+              value={selected}
+              onChange={handleSelectionChange}
+            />
 
-          <Button
-            component="a"
-            href="https://github.com/mantinedev/mantine"
-            size="xl"
-            variant="default"
-            className={classes.control}
-            leftSection={<Icon3dRotate size={20} />}
-          >
-            GitHub
-          </Button>
-           */}
-            </Group>
-          </Stack>
-          <Login />
-          <EmployeeLogin/>
+            {selected === 'User Login' && <Login />}
+            {selected === 'Employee Login' && <EmployeeLogin />}
+            </Stack>
         </Group>
       </Container>
     </div>

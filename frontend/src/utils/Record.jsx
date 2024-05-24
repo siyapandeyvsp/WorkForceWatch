@@ -1,7 +1,8 @@
 'use client';
 import React from 'react';
-import { useRecordWebcam } from 'react-record-webcam';
+
 import { Select } from './Select';
+import { useRecordWebcam } from 'react-record-webcam';
 
 export default function Record() {
   const {
