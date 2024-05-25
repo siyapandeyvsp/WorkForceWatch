@@ -19,13 +19,13 @@ const userNav = [
   { link: '/user/manage-tasks', label: 'Manage Tasks ', icon: IconChecklist },
 
 ];
-const employeeNav=[
-  {link:'/employee/profile',label:' Employee Profile',icon:IconUser},
-  {link:'/employee',label:'Employee Dashboard',icon:IconDashboard}
+const employeeNav = [
+  { link: '/employee/profile', label: ' Employee Profile', icon: IconUser },
+  { link: '/employee', label: 'Employee Dashboard', icon: IconDashboard }
 ]
-export function NavbarSimple({userType}) {
+export function NavbarSimple({ userType }) {
   const [active, setActive] = useState('Billing');
-const router=useRouter();
+  const router = useRouter();
   const data = userType === 'user' ? userNav : employeeNav;
   const links = data.map((item) => (
     <a
@@ -59,8 +59,8 @@ const router=useRouter();
       </div>
 
       <div className={classes.footer}>
-       
-        <a href="/employee/recordings" className={classes.link} onClick={(event) => {event.preventDefault() ; router.push('/employee/recordings')}}>
+
+        <a href="/employee/recordings" className={classes.link} onClick={(event) => { event.preventDefault(); router.push('/employee/recordings') }}>
           <IconSettings className={classes.linkIcon} stroke={1.5} />
           <span>Settings</span>
         </a>
