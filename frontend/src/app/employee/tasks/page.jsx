@@ -70,7 +70,12 @@ const EmployeeTasksPage = () => {
           Assigned Tasks{" "}
         </Text>
         {tasks.map((task) => (
-          <Paper withBorder p={10}>
+          <Paper withBorder p={10}
+          style={{ 
+            borderRight: `5px solid ${getPriorityColor(task.task.priority)}`, 
+            marginBottom: '10px' 
+          }}
+          >
             <Stack>
             <Badge
               color={getPriorityColor(task.task.priority)}

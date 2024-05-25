@@ -9,16 +9,17 @@ const EmployeeDashboard = () => {
 console.log("Welcome to employee dashboard",employee)
   const [tasks, setTasks] = useState([]);
 
- const fetchAssignmentsOfEmployee = () => {
-  const response = fetch(`http://localhost:5000/assignment/getbyemployee/${currentUser._id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-auth-token': currentUser.token
-    }
-  })
-}
- 
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const response = await axiosInstance.get(
+        `/assignment/getbyemployee/${employee._id}`
+      );
+      console.log(response.data);
+      setTasks(response.data || []);
+    };
+
+    fetchTasks();
+  }, []);
 
   return (
     <Container>
