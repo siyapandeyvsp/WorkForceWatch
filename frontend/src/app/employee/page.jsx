@@ -26,9 +26,8 @@ const EmployeeDashboard = () => {
   return (
     <Container>
         <Title ta='center'>Welcome {currentUser.name}</Title>
-    <h1>Tasks </h1>
-<EmployeeTasks/>
-    <WorkSessionData/>
+
+  
     </Container>
   )
 }
