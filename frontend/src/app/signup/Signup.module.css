@@ -1,0 +1,73 @@
+.signupPage {
+  background: url('/background-image.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  height: 100%;
+  position: relative;
+  box-sizing: border-box;
+  background-color: var(--mantine-color-white, var(--mantine-color-dark-8));
+}
+
+.centerContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.title1 {
+  font-family: Greycliff CF, var(--mantine-font-family);
+  font-size: 62px;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0;
+  padding: 0;
+  color: var(--mantine-color-black, var(--mantine-color-white));
+}
+
+.title {
+  font-family: Greycliff CF, var(--mantine-font-family);
+  font-weight: 900;
+  color: #1a202c;
+}
+
+.container {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.leftPane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5rem;
+  margin-top: -1rem;
+}
+
+.rightPane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  margin-left: 4rem;
+
+ 
+  margin-top:-1rem
+}
+
+.scrollablePaper {
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+}

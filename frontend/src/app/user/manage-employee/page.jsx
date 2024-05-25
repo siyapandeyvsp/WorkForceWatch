@@ -5,6 +5,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { Drawer } from '@mantine/core';
 import AddUserForm from "./AddUserForm";
 import { UsersTable } from "./UserTable";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
 const ManageEmployee = () => {
     const [opened, { open, close }] = useDisclosure(false);
 
@@ -17,7 +19,9 @@ const ManageEmployee = () => {
         <AddUserForm/>
       </Drawer>
 
-      <Button onClick={open}>Add Employee</Button>
+      <Button m={5} onClick={open}>Add Employee
+      <FontAwesomeIcon icon={faAdd} style={{font:'bold', marginLeft:'1rem'}}/>
+      </Button>
             
           </Grid.Col>
           
