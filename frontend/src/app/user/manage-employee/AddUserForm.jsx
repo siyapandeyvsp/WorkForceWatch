@@ -9,6 +9,7 @@ const AddUserForm = () => {
     initialValues: {
       email: '',
       name: '',
+      
       password: '',
       avatar: '',
     designation: '',
@@ -55,10 +56,11 @@ const AddUserForm = () => {
 
 <TextInput
           withAsterisk
-          label="Name"
-          placeholder="Enter your name"
+          label=" Name"
+          placeholder="Enter name"
           {...form.getInputProps('name')}
         />
+
 
 <PasswordInput
 label="Password"

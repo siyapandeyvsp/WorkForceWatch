@@ -10,7 +10,6 @@ import {
   IconUser,
   IconSettings,
 } from '@tabler/icons-react';
-import { MantineLogo } from '@mantinex/mantine-logo';
 import classes from './NavbarSimple.module.css';
 import { useRouter } from 'next/navigation';
 import ScreenRecorder from '@/utils/ScreenRecorder';
@@ -20,8 +19,10 @@ const userNav = [
 
 ];
 const employeeNav=[
-  {link:'/employee/profile',label:' Employee Profile',icon:IconUser},
-  {link:'/employee',label:'Employee Dashboard',icon:IconDashboard}
+  {link:'/employee/profile',label:' Profile',icon:IconUser},
+  {link:'/employee',label:' Dashboard',icon:IconDashboard},
+  {link:'/employee/tasks',label:' Tasks',icon:IconChecklist},
+  {link:'/employee/work-sessions',label:' Work Sessions',icon:IconUsersGroup},
 ]
 export function NavbarSimple({userType}) {
   const [active, setActive] = useState('Billing');
@@ -51,10 +52,7 @@ const router=useRouter();
   return (
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
-        {/* <Group className={classes.header} justify="space-between">
-          <MantineLogo size={28} />
-          <Code fw={700}>v3.1.2</Code>
-        </Group> */}
+       
         {links}
       </div>
 
