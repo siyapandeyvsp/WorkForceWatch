@@ -332,7 +332,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Employee ID"
                   placeholder="Enter employee ID"
-                  value={employee.employeeId}
+                  value={employee._id}
                   name="employeeId"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
