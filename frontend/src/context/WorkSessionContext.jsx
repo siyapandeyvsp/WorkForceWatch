@@ -23,9 +23,11 @@ export const WorkSessionProvider = ({ children }) => {
   const [displayMedia, setDisplayMedia] = useState(null);
 
   const [videoFileName, setVideoFileName] = useState("");
+  const [screenVideoFileName, setScreenVideoFileName] = useState('');
 
   const [workSessions, setWorkSessions] = useState([]);
-const [videoRecording, setVideoRecording] = useState(null);
+  const [videoRecording, setVideoRecording] = useState(null);
+
   const {
     activeRecordings,
     cancelRecording,
@@ -47,6 +49,7 @@ const [videoRecording, setVideoRecording] = useState(null);
   } = useRecordWebcam();
 
   const screenRecording = useRef(null);
+
   const createNewWorkession = () => {
     fetch("http://localhost:5000/work-session/add", {
       method: "POST",
@@ -63,6 +66,7 @@ const [videoRecording, setVideoRecording] = useState(null);
         setCurrentWorkSession(data);
       });
   };
+
   const startScreenRecording = async () => {
     const stream = await navigator.mediaDevices.getDisplayMedia({
       audio: true,
@@ -95,24 +99,27 @@ const [videoRecording, setVideoRecording] = useState(null);
     console.log("start video recording");
     try {
       const recording = await createRecording();
+      console.log(recording);
       if (!recording) return;
       await openCamera(recording.id);
       await startRecording(recording.id);
       console.log("recording started", recording);
       setVideoRecording(recording);
-      console.log('video id',recording.id)
-      setTimeout(async() => {
-        try {
-          await stopRecording(recording.id);
+      console.log('video id', recording.id)
+      stopRecording(recording.id)
+        .then(async (result) => {
+          console.log(result);
           await closeCamera(recording.id);
-        } catch (error) {
-          console.log(error);
-        }
-        
-      }, 3000);
-      console.log("recording finished", recording);
+          console.log("recording finished", recording);
+        }).catch((err) => {
+          console.log(err);
+        });
+      // setTimeout(() => {
+      //   // console.log(stopRecording);
+      // }, 3000);
+
     } catch (error) {
-      console.log({ error });
+      console.log(error);
     }
   };
 
@@ -122,7 +129,7 @@ const [videoRecording, setVideoRecording] = useState(null);
   };
 
   const stopVideoRecording = async () => {
-    console.log("video recording in state",videoRecording);
+    console.log("video recording in state", videoRecording);
     const recording = videoRecording;
     try {
       await stopRecording(recording.id);
@@ -143,7 +150,7 @@ const [videoRecording, setVideoRecording] = useState(null);
 
   const generateRandomName = (type) => {
     const timestamp = Date.now();
-    return `${type === 'screen' ? 'screen' :'video'}_recording_${timestamp}.webm`;
+    return `${type === 'screen' ? 'screen' : 'video'}_recording_${timestamp}.webm`;
   };
 
   const uploadFile = (file) => {
@@ -201,7 +208,7 @@ const [videoRecording, setVideoRecording] = useState(null);
           generateRandomName('video')
         );
         uploadFile(file);
-        setVideoFileName(file.name);
+        // setVideoFileName(file.name);
         // saveToDatabase();
         // const url = URL.createObjectURL(blob);
         // const a = document.createElement('a');
@@ -216,6 +223,7 @@ const [videoRecording, setVideoRecording] = useState(null);
   };
 
   const saveRecording = () => {
+    console.log('saving recording...');
     fetch(screenRecording.current.src)
       .then((response) => response.blob())
       .then((blob) => {
@@ -225,7 +233,9 @@ const [videoRecording, setVideoRecording] = useState(null);
           generateRandomName('screen')
         );
         uploadFile(file);
-        setVideoFileName(file.name);
+        console.log(file.name);
+        setScreenVideoFileName(file.name);
+        endSession(file.name);
         // saveToDatabase();
         // const url = URL.createObjectURL(blob);
         // const a = document.createElement('a');
@@ -245,10 +255,7 @@ const [videoRecording, setVideoRecording] = useState(null);
     }
   };
 
-  const checkOut = () => {
-    stopScreenRecording();
-    stopVideoRecording();
-    // console.log(videoFileName);
+  const endSession = (filename) => {
     fetch(
       `http://localhost:5000/work-session/update/${currentWorkSession._id}`,
       {
@@ -258,7 +265,7 @@ const [videoRecording, setVideoRecording] = useState(null);
           "x-auth-token": currentUser.token,
         },
         body: JSON.stringify({
-          screenRecording: videoFileName,
+          screenRecording: filename,
           checkOutTime: new Date(),
         }),
       }
@@ -267,6 +274,11 @@ const [videoRecording, setVideoRecording] = useState(null);
       .then((data) => {
         setCurrentWorkSession(null);
       });
+  }
+
+  const checkOut = () => {
+    stopScreenRecording();
+    
   };
 
   const fetchWorkSesions = async () => {
@@ -287,6 +299,11 @@ const [videoRecording, setVideoRecording] = useState(null);
     fetchWorkSesions();
   }, []);
 
+  useEffect(() => {
+    // startVideoRecording();
+  }, [])
+  
+
   return (
     <WorkSessionContext.Provider
       value={{
@@ -301,11 +318,11 @@ const [videoRecording, setVideoRecording] = useState(null);
         stopVideoRecording,
       }}
     >
-      {activeRecordings[0] && (
-        <video ref={activeRecordings[0].previewRef} autoPlay loop playsInline style={{display:'none'}} />
-      )}
+      {/* {activeRecordings[0] && (
+        <video ref={activeRecordings[0].previewRef} autoPlay loop playsInline style={{ display: 'none' }} />
+      )} */}
 
-      <video ref={screenRecording} height={300} width={600} controls  style={{display:'none'}} />
+      <video ref={screenRecording} height={300} width={600} controls style={{ display: 'none' }} />
       {children}
     </WorkSessionContext.Provider>
   );
