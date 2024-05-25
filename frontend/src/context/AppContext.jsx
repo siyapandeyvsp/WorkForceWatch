@@ -10,7 +10,7 @@ export const AppProvider = ({children}) => {
   );
   const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
-    timeout: 1000,
+    timeout: 4000,
     // headers: { "x-auth-token": currentUser.token },
   });
 

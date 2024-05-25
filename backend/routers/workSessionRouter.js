@@ -10,7 +10,7 @@ router.post("/add", verifyToken, (req, res) => {
   const checkInTime = new Date(req.body.checkInTime);
   const checkOutTime = new Date(req.body.checkOutTime);
   req.body.duration = checkOutTime - checkInTime;
-
+  console.log(req.body);
   new Model(req.body)
     .save()
     .then((result) => {

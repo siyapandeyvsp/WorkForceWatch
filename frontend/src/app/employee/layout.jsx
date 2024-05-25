@@ -78,13 +78,23 @@ export default function Layout({ children }) {
     }
   }, [isScreenRecording]);
 
-  useEffect(() => {
-    if (isVideoRecording) {
-      startVideoRecording();
-    } else {
-      stopVideoRecording();
-    }
-  }, [isVideoRecording]);
+  // useEffect(() => {
+  //   if (isVideoRecording) {
+      
+  //       .then((result) => {
+  //         console.log(result);
+  //       }).catch((err) => {
+  //         console.log(err);
+  //       });
+  //   } else {
+  //     stopVideoRecording()
+  //       .then((result) => {
+  //         console.log(result);
+  //       }).catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }, [isVideoRecording]);
 
   const handleCheckChange = (event) => {
     setChecked(event.currentTarget.checked);
@@ -96,7 +106,7 @@ export default function Layout({ children }) {
       // update checkout time and remove current session record
       // closeModal();
       checkOut();
-      setVideoRecording(false);
+      // setVideoRecording(false);
       setScreenRecording(false);
     }
   };
@@ -190,8 +200,13 @@ export default function Layout({ children }) {
           <Group>
             <Switch
               checked={isVideoRecording}
-              onChange={(event) => {
+              onChange={async (event) => {
                 setVideoRecording(event.currentTarget.checked);
+                if(event.currentTarget.checked){
+                  await startVideoRecording();
+                }else{
+                  await stopVideoRecording();
+                }
               }}
               label="Start video recording"
             />

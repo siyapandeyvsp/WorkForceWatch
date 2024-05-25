@@ -24,9 +24,9 @@ const employeeNav=[
   {link:'/employee/tasks',label:' Tasks',icon:IconChecklist},
   {link:'/employee/work-sessions',label:' Work Sessions',icon:IconUsersGroup},
 ]
-export function NavbarSimple({userType}) {
+export function NavbarSimple({ userType }) {
   const [active, setActive] = useState('Billing');
-const router=useRouter();
+  const router = useRouter();
   const data = userType === 'user' ? userNav : employeeNav;
   const links = data.map((item) => (
     <a
@@ -57,8 +57,8 @@ const router=useRouter();
       </div>
 
       <div className={classes.footer}>
-       
-        <a href="/employee/recordings" className={classes.link} onClick={(event) => {event.preventDefault() ; router.push('/employee/recordings')}}>
+
+        <a href="/employee/recordings" className={classes.link} onClick={(event) => { event.preventDefault(); router.push('/employee/recordings') }}>
           <IconSettings className={classes.linkIcon} stroke={1.5} />
           <span>Settings</span>
         </a>
