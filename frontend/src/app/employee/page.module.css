@@ -1,0 +1,28 @@
+/* page.module.css */
+
+.taskDot {
+    height: 8px;
+    width: 8px;
+    background-color: blue;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 2px;
+  }
+  
+  .attendanceDot {
+    height: 8px;
+    width: 8px;
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 2px;
+  }
+  
+  .taskDate {
+    background: rgba(0, 0, 255, 0.1);
+  }
+  
+  .attendanceDate {
+    background: rgba(0, 255, 0, 0.1);
+  }
+  

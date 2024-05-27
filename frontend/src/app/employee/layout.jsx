@@ -151,12 +151,12 @@ export default function Layout({ children }) {
           />
 
           <Group>
-            <Switch
+            {/* <Switch
               size="md"
               color="dark.4"
               onLabel={sunIcon}
               offLabel={moonIcon}
-            />
+            /> */}
             <Switch
               checked={checked}
               // onChange={(event) => setChecked(event.currentTarget.checked)}
