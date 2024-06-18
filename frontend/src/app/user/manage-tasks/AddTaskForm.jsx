@@ -5,7 +5,7 @@ import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import axios from 'axios';
 
-const AddTaskForm = () => {
+const AddTaskForm = ({ employeeId = '',assigned=false }) => {
   const [tasks, setTasks] = useState([]);
     const [currentUser, setCurrentUser] = useState(
         JSON.parse(sessionStorage.getItem('user'))
@@ -23,6 +23,8 @@ const AddTaskForm = () => {
       description: '',
       priority: '',
       status: '',
+      assignedTo:employeeId,
+      assigned:assigned
      
     },
 
@@ -68,11 +70,11 @@ const AddTaskForm = () => {
           placeholder="Enter task description"
           {...form.getInputProps('description')}
         />
-        {/* <TextInput
+        <TextInput
           label="Assigned To"
           placeholder="Enter user ID"
           {...form.getInputProps('assignedTo')}
-        /> */}
+        />
         <Select
           label="Priority"
           data={['High', 'Medium', 'Low']}

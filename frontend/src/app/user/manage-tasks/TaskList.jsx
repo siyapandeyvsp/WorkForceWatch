@@ -17,11 +17,14 @@ const TaskList = ({ employeeId }) => {
 
   const { fetchTasks, tasks } = useTaskContext();
 
-  const updateTask = async (taskId) => {
+  const updateTask = async (taskId, status, priority, description) => {
     const response = await axiosInstance
       .put(
         `task/update/${taskId}`,
         {
+          status,
+          priority,
+          description,
           assigned: true,
         },
         {
@@ -39,6 +42,23 @@ const TaskList = ({ employeeId }) => {
         console.log(err);
       });
   };
+
+  const deleteTask = async (taskId) => {
+    try {
+      const response = await axiosInstance.delete(`task/delete/${taskId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": currentUser.token,
+        },
+      });
+      console.log(response);
+      fetchTasks();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
   const assignTask = async (taskId) => {
     const response = await axiosInstance
       .post(
@@ -81,6 +101,9 @@ const TaskList = ({ employeeId }) => {
           <TaskCard
             isAssigning={Boolean(employeeId)}
             assignfunction={() => assignTask(task._id)}
+            deletefunction={() => deleteTask(task._id)}
+            updatefunction={(taskId,status, priority, description) => updateTask(task._id, status, priority, description)}
+
             task={task}
           />
         </Grid.Col>

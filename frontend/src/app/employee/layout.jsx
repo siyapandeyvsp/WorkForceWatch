@@ -7,6 +7,7 @@ import {
   Modal,
   Paper,
   Stack,
+  Text
 } from "@mantine/core";
 import { Switch, useMantineTheme, rem } from "@mantine/core";
 import {
@@ -23,7 +24,7 @@ import { MantineLogo } from "@mantinex/mantine-logo";
 import { NavbarSimple } from "../(main)/navbar"; // import the NavbarSimple component
 import { useEffect, useState } from "react";
 import useWorkSessionContext from "@/context/WorkSessionContext";
-
+import classes from "./page.module.css";
 export default function Layout({ children }) {
   const theme = useMantineTheme();
   const [checked, setChecked] = useState(false);
@@ -136,7 +137,7 @@ export default function Layout({ children }) {
       padding="md"
     >
       <AppShell.Header>
-        <Group h="100%" px="md" justify="space-between">
+        <Group h="100%" px="md" >
           <Burger
             opened={mobileOpened}
             onClick={toggleMobile}
@@ -150,13 +151,22 @@ export default function Layout({ children }) {
             size="sm"
           />
 
-          <Group>
-            {/* <Switch
-              size="md"
-              color="dark.4"
-              onLabel={sunIcon}
-              offLabel={moonIcon}
-            /> */}
+       
+          
+          <Group align="start">
+            {" "}
+            <h1 className={classes.title}>
+              <Text
+                component="span"
+                variant="gradient"
+                gradient={{ from: "blue", to: "cyan" }}
+                inherit
+              >
+                WorkForce Watch
+              </Text>
+            </h1>
+          </Group>
+          <Group align="end">
             <Switch
               checked={checked}
               // onChange={(event) => setChecked(event.currentTarget.checked)}
@@ -198,7 +208,7 @@ export default function Layout({ children }) {
       >
         <Paper p={16} shadow="xs" style={{ width: 400 }}>
           <Group>
-            <Switch
+            {/* <Switch
               checked={isVideoRecording}
               onChange={async (event) => {
                 setVideoRecording(event.currentTarget.checked);
@@ -209,7 +219,7 @@ export default function Layout({ children }) {
                 }
               }}
               label="Start video recording"
-            />
+            /> */}
             <Switch
               checked={isScreenRecording}
               onChange={(event) => {

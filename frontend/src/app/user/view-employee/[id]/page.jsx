@@ -165,7 +165,7 @@ const [workSessions, setWorkSessions] = useState([{}]);
               </Stack>
           {/* <Text order={6} ta="center" c="gray">-----------------OR---------------- </Text> */}
         </Paper>
-        <div
+        {/* <div
           style={{
             display: "flex",
             alignItems: "center",
@@ -181,13 +181,14 @@ const [workSessions, setWorkSessions] = useState([{}]);
           <hr
             style={{ flex: 1, border: "none", borderTop: "1px solid #b4b9be" }}
           />
-        </div>
-        <Paper p={10} shadow="xs">
+        </div> */}
+        {/* <Paper p={10} shadow="xs">
           <Text order={4} ta="center" c="gray">
             Add New{" "}
           </Text>
-          <AddTaskForm />
-        </Paper>
+           <AddTaskForm /> 
+           <AddTaskForm employeeId={id} assigned={true} /> 
+        </Paper> */}
       </Modal>
 
       <Button onClick={open}>Add Task</Button>
@@ -202,12 +203,12 @@ const [workSessions, setWorkSessions] = useState([{}]);
         </Paper>
       </Stack>
       <Stack >
-        <Paper p={10} shadow="xl" overflow='auto'>
+        {/* <Paper p={10} shadow="xl" overflow='auto'>
           <Title order={4} ta="center" >Tasks </Title>
-          <Group>
+           <Group>
             {tasks.map(({task, createdAt}) => <TaskCard key={task._id} task={task} />)}
-          </Group>
-        </Paper>
+          </Group> 
+        </Paper> */}
         <WorkSessionTable workSessions={workSessions} /> {/* Add this line */}
       </Stack>
 

@@ -282,7 +282,9 @@ export const WorkSessionProvider = ({ children }) => {
   };
 
   const fetchWorkSesions = async () => {
+    if(!currentUser) return;
     const response = await axios.get(
+
       "http://localhost:5000/work-session/getbyemployee/" + currentUser._id,
       {
         headers: {

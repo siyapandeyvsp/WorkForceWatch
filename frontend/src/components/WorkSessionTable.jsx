@@ -25,7 +25,7 @@ const WorkSessionTable = ({ workSessions }) => {
         <div>
             <Container>
                 <Stack>
-                    <Title>Work Session Data</Title>
+                    <Title>Work Sessions</Title>
                     <Table>
                         <Table.Thead>
                             <Table.Tr>

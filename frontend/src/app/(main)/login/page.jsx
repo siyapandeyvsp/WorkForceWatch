@@ -55,7 +55,7 @@ const router=useRouter();
       
     }).catch((err) => {
       console.log(err);
-      notifications.show({ title: 'Error', message: err });
+      notifications.show({ title: 'Error', message: err.message });
 
     });
     
