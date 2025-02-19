@@ -7,7 +7,7 @@ const taskRouter = require("./routers/taskRouter");
 const assignmentRouter=require("./routers/assignmentRouter");
 const workSessionRouter = require("./routers/workSessionRouter");
 const utilRouter = require("./routers/util");
-
+const formRouter=require("./routers/formRouter");
 const app = express();
 const port = 5000;
 
@@ -29,6 +29,7 @@ app.use("/task", taskRouter);
 app.use("/assignment",assignmentRouter);
 app.use("/work-session", workSessionRouter);
 app.use("/util", utilRouter);
+app.use("/form", formRouter);
 
 app.use(express.static("./static/uploads"));
 
