@@ -18,6 +18,6 @@ sex: {
     enum: ['male', 'female'],
     required: true
 }
-});
+},{timestamps:true});
 module.exports = model('FormCollection', formSchema);
 

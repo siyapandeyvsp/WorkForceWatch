@@ -229,7 +229,7 @@ const EmployeeDashboard = () => {
         const response = await axiosInstance.get(
           `/employee/getbyid/${employee._id}`
         );
-        setEmployee({ ...employee, ...response.data });
+        setEmployee({ ...employee, ...response.data.result });
       } catch (error) {
         console.log(error);
       }
@@ -240,7 +240,8 @@ const EmployeeDashboard = () => {
         const response = await axiosInstance.get(
           `/assignment/getbyemployee/${employee._id}`
         );
-        setTasks(response.data || []);
+        console.log('Tasks on employee page ', response.data.result);
+        setTasks(response.data.result || []);
       } catch (error) {
         console.log(error);
       }
@@ -251,8 +252,8 @@ const EmployeeDashboard = () => {
         const response = await axiosInstance.get(
           `/work-session/getbyemployee/${employee._id}`
         );
-        console.log('Work sessions', response.data)
-        //  setWorkSessions(response.data || []);
+        console.log('Work sessions', response.data.result);
+        //  setWorkSessions(response.data.result || []);
         setWorkSessions(DUMMY_ATTENDENCE);
 
         // Extract unique presence dates
@@ -301,7 +302,7 @@ const EmployeeDashboard = () => {
   };
 
   const getCurrentTask = () => {
-    return tasks.find((task) => task.task.status === "In Progress");
+    return tasks.find((task) => task.task?.status === "In Progress");
   };
 
   const getRecentWorkSessions = () => {
@@ -332,7 +333,7 @@ const EmployeeDashboard = () => {
   const getTasksForDate = (date) => {
     return tasks.filter((task) => {
       if (task?.task?.createdAt && date) {
-        return new Date(task.task.createdAt).toDateString() === date.toDateString();
+        return new Date(task.task?.createdAt).toDateString() === date.toDateString();
       }
       return false;
     });
@@ -741,7 +742,7 @@ const EmployeeDashboard = () => {
             marginBottom: '15px',
             textTransform: 'capitalize'
           }}>
-            {currentTask.task.taskName}
+            {currenttask.task?.taskName}
           </Text>
 
           {/* Priority Badge */}
@@ -749,14 +750,14 @@ const EmployeeDashboard = () => {
             marginBottom: '15px',
             padding: '8px 18px',
             borderRadius: '30px',
-            backgroundColor: getPriorityColor(currentTask.task.priority),
+            backgroundColor: getPriorityColor(currenttask.task?.priority),
             color: '#fff',
             fontSize: '14px',
             fontWeight: 'bold',
             display: 'inline-block',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
           }}>
-            Priority: {currentTask.task.priority}
+            Priority: {currenttask.task?.priority}
           </div>
 
           {/* Description */}
@@ -782,7 +783,7 @@ const EmployeeDashboard = () => {
             textTransform: 'uppercase'
           }}>
             Assigned on: <span style={{ fontWeight: 'bold' }}>
-              {new Date(currentTask.task.createdAt).toLocaleDateString()}
+              {new Date(currenttask.task?.createdAt).toLocaleDateString()}
             </span>
           </div>
         </div>
@@ -842,7 +843,7 @@ const EmployeeDashboard = () => {
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
               }}>
-                {task.task.taskName}
+                {task.task?.taskName}
               </Text>
 
               {/* Priority Badge */}
@@ -850,13 +851,13 @@ const EmployeeDashboard = () => {
                 display: 'inline-block',
                 padding: '6px 14px',
                 borderRadius: '30px',
-                backgroundColor: getPriorityColor(task.task.priority),
+                backgroundColor: getPriorityColor(task.task?.priority),
                 color: '#fff',
                 fontSize: '14px',
                 fontWeight: 'bold',
                 boxShadow: '0 3px 5px rgba(0, 0, 0, 0.1)',
               }}>
-                Priority: {task.task.priority}
+                Priority: {task.task?.priority}
               </div>
             </List.Item>
           ))}
@@ -964,12 +965,12 @@ const EmployeeDashboard = () => {
               <List>
                 {selectedTasks.map((task) => (
                   <List.Item key={task._id}>
-                    {task.task.taskName}{" "}
+                    {task.task?.taskName}{" "}
                     <Badge
-                      color={getPriorityColor(task.task.priority)}
+                      color={getPriorityColor(task.task?.priority)}
                       style={{ marginBottom: "5px" }}
                     >
-                      Priority: {task.task.priority}
+                      Priority: {task.task?.priority}
                     </Badge>
                   </List.Item>
                 ))}
@@ -1034,12 +1035,12 @@ const EmployeeDashboard = () => {
         <List>
           {selectedTasks.map((task) => (
             <List.Item key={task._id}>
-              {task.task.taskName}{" "}
+              {task.task?.taskName}{" "}
               <Badge
-                color={getPriorityColor(task.task.priority)}
+                color={getPriorityColor(task.task?.priority)}
                 style={{ marginBottom: "5px" }}
               >
-                Priority: {task.task.priority}
+                Priority: {task.task?.priority}
               </Badge>
             </List.Item>
           ))}

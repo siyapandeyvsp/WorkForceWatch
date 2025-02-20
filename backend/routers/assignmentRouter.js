@@ -19,7 +19,7 @@ router.post("/add", verifyToken, (req, res) => {
 router.get("/getall", (req, res) => {
   Model.find()
     .then((result) => {
-      res.status(200).json({ message: "Assignments fetched successfully", result });
+      res.status(200).json({ message: "Assignments fetched successfully", data:result });
     })
     .catch((err) => {
       console.log(err);

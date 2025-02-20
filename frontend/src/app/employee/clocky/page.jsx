@@ -45,8 +45,8 @@ const Clocky = () => {
       const response = await axiosInstance.get(
         `/assignment/getbyemployee/${employee?._id}`
       );
-      console.log(response.data);
-      setTasks(response.data || []);
+      console.log(response.data.result);
+      setTasks(response.data.result || []);
     };
 
     fetchTasks();
@@ -76,7 +76,7 @@ const Clocky = () => {
 
     try {
       const response = await axiosInstance.put(`/assignment/update/${task._id}`, updatedTask);
-      setTasks(tasks.map(t => t._id === task._id ? response.data : t));
+      setTasks(tasks.map(t => t._id === task._id ? response.data.result : t));
       showNotification({ message: "Status has been updated" });
     } catch (error) {
       console.error("Failed to update task status", error);
@@ -95,7 +95,7 @@ const Clocky = () => {
 
     try {
       const response = await axiosInstance.put(`/assignment/update/${task._id}`, updatedTask);
-      setTasks(tasks.map(t => t._id === task._id ? response.data : t));
+      setTasks(tasks.map(t => t._id === task._id ? response.data.result.result : t));
       showNotification({ message: `${field.charAt(0).toUpperCase() + field.slice(1)} has been updated` });
     } catch (error) {
       console.error(`Failed to update task ${field}`, error);
@@ -105,7 +105,7 @@ const Clocky = () => {
   const startTask = async (taskId) => {
     try {
       const response = await axiosInstance.put(`task/start/${taskId}`);
-      return response.data.startTime;
+      return response.data.result.startTime;
     } catch (err) {
       console.error("Failed to start task:", err);
     }
@@ -115,8 +115,8 @@ const Clocky = () => {
     try {
       const response = await axiosInstance.put(`task/stop/${taskId}`);
       return {
-        endTime: response.data.endTime,
-        duration: response.data.duration
+        endTime: response.data.result.endTime,
+        duration: response.data.result.duration
       };
     } catch (err) {
       console.error("Failed to stop task:", err);

@@ -23,7 +23,7 @@ router.get("/getall", (req, res) => {
     .populate('assignedBy', 'email name avatar companyId role createdAt')
     .then((result) => {
       console.log(result);
-      res.status(200).json({ message: "Tasks fetched successfully", result });
+      res.status(200).json({ message: "Tasks fetched successfully", data:result });
     })
     .catch((err) => {
       console.log(err);
