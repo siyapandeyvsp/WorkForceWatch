@@ -16,32 +16,42 @@ router.post("/create", (req, res) => {
 });
 
 router.get("/get", async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
+  const { id, page = 1, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
 
   try {
-    const total = await Model.countDocuments();
-    const result = await Model.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
-
-    const totalPages = Math.ceil(total / limit);
-
-    res.status(200).json({
-      status: 200,
-      message: "Forms fetched successfully",
-      result,
-      meta: {
-        total,
-        per_page: limit,
-        current_page: page,
-        last_page: totalPages,
-        first_page: 1,
-        first_page_url: `/?page=1`,
-        last_page_url: `/?page=${totalPages}`,
-        next_page_url: page < totalPages ? `/?page=${page + 1}` : null,
-        previous_page_url: page > 1 ? `/?page=${page - 1}` : null
+    if (id) {
+      // Fetch specific form by ID
+      const result = await Model.findById(id);
+      if (result) {
+        res.status(200).json({ status: 200, message: "Form fetched successfully", result });
+      } else {
+        res.status(404).json({ status: 404, message: "Form not found" });
       }
-    });
+    } else {
+      // Fetch all forms with pagination
+      const total = await Model.countDocuments();
+      const result = await Model.find().sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit));
+
+      const totalPages = Math.ceil(total / limit);
+
+      res.status(200).json({
+        status: 200,
+        message: "Forms fetched successfully",
+        result,
+        meta: {
+          total,
+          per_page: parseInt(limit),
+          current_page: parseInt(page),
+          last_page: totalPages,
+          first_page: 1,
+          first_page_url: `/?page=1`,
+          last_page_url: `/?page=${totalPages}`,
+          next_page_url: page < totalPages ? `/?page=${parseInt(page) + 1}` : null,
+          previous_page_url: page > 1 ? `/?page=${parseInt(page) - 1}` : null
+        }
+      });
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json({ status: 500, message: "Failed to fetch forms", error: err });
