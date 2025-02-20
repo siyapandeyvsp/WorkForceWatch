@@ -7,33 +7,33 @@ router.post("/create", (req, res) => {
   new Model(req.body)
     .save()
     .then((result) => {
-      res.status(200).json({ message: "Form created successfully", result });
+      res.status(200).json({ status: 200, message: "Form created successfully", result });
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Failed to create form", error: err });
+      res.status(500).json({ status: 500, message: "Failed to create form", error: err });
     });
 });
 
 router.get("/get", (req, res) => {
   Model.find()
     .then((result) => {
-      res.status(200).json({ message: "Forms fetched successfully", result });
+      res.status(200).json({ status: 200, message: "Forms fetched successfully", result });
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Failed to fetch forms", error: err });
+      res.status(500).json({ status: 500, message: "Failed to fetch forms", error: err });
     });
 });
 
 router.put("/update/:id", (req, res) => {
   Model.findByIdAndUpdate(req.params.id, req.body)
     .then((result) => {
-      res.status(200).json({ message: "Form updated successfully", result });
+      res.status(200).json({ status: 200, message: "Form updated successfully", result });
       console.log(result);
     }).catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Failed to update form", error: err });
+      res.status(500).json({ status: 500, message: "Failed to update form", error: err });
     });
 });
 
