@@ -21,5 +21,8 @@ const taskSchema = new Schema({
   ],
   assigned: {type : Boolean, default: false},
   createdAt: { type: Date, default: Date.now },
+  startTime:{type: Date},
+  endTime:{type: Date},
+  duration:{type: Number},
 });
 module.exports = model("TaskCollection", taskSchema);

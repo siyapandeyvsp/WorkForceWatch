@@ -1,15 +1,11 @@
-"use client";
-import { Badge, Text, Card, Grid } from "@mantine/core";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useFetchAllTasks } from "../../../hooks/useFetchAllTasks";
+// TaskList.jsx
+import { Paper, Stack } from "@mantine/core";
+import React, { useState } from "react";
 import useAppContext from "@/context/AppContext";
-
 import TaskCard from "@/components/TaskCard";
 import useTaskContext from "@/context/TaskContext";
 
 const TaskList = ({ employeeId }) => {
-  // const [tasks, setTasks] = useState([]);
   const { axiosInstance } = useAppContext();
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(sessionStorage.getItem("user"))
@@ -17,15 +13,15 @@ const TaskList = ({ employeeId }) => {
 
   const { fetchTasks, tasks } = useTaskContext();
 
-  const updateTask = async (taskId, status, priority, description) => {
-    const response = await axiosInstance
-      .put(
+  const updateTask = async (taskId, status, priority, description, assigned = true) => {
+    try {
+      const response = await axiosInstance.put(
         `task/update/${taskId}`,
         {
           status,
           priority,
           description,
-          assigned: true,
+          assigned,
         },
         {
           headers: {
@@ -33,14 +29,12 @@ const TaskList = ({ employeeId }) => {
             "x-auth-token": currentUser.token,
           },
         }
-      )
-      .then((response) => {
-        console.log(response);
-        fetchTasks();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      );
+      console.log("Task updated:", response.data);
+      fetchTasks();
+    } catch (err) {
+      console.error("Failed to update task:", err);
+    }
   };
 
   const deleteTask = async (taskId) => {
@@ -51,17 +45,16 @@ const TaskList = ({ employeeId }) => {
           "x-auth-token": currentUser.token,
         },
       });
-      console.log(response);
+      console.log("Task deleted:", response.data);
       fetchTasks();
     } catch (err) {
-      console.log(err);
+      console.error("Failed to delete task:", err);
     }
   };
 
-
   const assignTask = async (taskId) => {
-    const response = await axiosInstance
-      .post(
+    try {
+      const response = await axiosInstance.post(
         "assignment/add",
         {
           task: taskId,
@@ -73,42 +66,32 @@ const TaskList = ({ employeeId }) => {
             "x-auth-token": currentUser.token,
           },
         }
-      )
-      .then((response) => {
-        console.log(response);
-        updateTask(taskId);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-      
+      );
+      console.log("Task assigned:", response.data);
+      updateTask(taskId, "To Do", "Medium", "Task assigned to employee", true);
+    } catch (err) {
+      console.error("Failed to assign task:", err);
+    }
   };
 
-  // useEffect(() => {
-  //       const fetchTasks = async () => {
-  //         const response = await axios.get("http://localhost:5000/task/getall");
-  //         console.log(response.data)
-  //         setTasks(response.data);
-  //       };
-
-  //       fetchTasks();
-  //     }, []);
-
   return (
-    <Grid gutter="md" style={{ maxWidth: "100%", padding: "20px" }}>
-      {tasks.map((task) => (
-        <Grid.Col span={4} key={task._id}>
-          <TaskCard
-            isAssigning={Boolean(employeeId)}
-            assignfunction={() => assignTask(task._id)}
-            deletefunction={() => deleteTask(task._id)}
-            updatefunction={(taskId,status, priority, description) => updateTask(task._id, status, priority, description)}
-
-            task={task}
-          />
-        </Grid.Col>
-      ))}
-    </Grid>
+    <Paper padding="lg" shadow="md" radius="md" style={{ width: "100%", padding: "20px" }}>
+      <Stack spacing="md">
+        {tasks.map((task) => (
+          <div key={task._id} style={{ width: "100%" }}>
+            <TaskCard
+              isAssigning={Boolean(employeeId)}
+              assignfunction={() => assignTask(task._id)}
+              deletefunction={() => deleteTask(task._id)}
+              updatefunction={(taskId, status, priority, description) =>
+                updateTask(task._id, status, priority, description)
+              }
+              task={task}
+            />
+          </div>
+        ))}
+      </Stack>
+    </Paper>
   );
 };
 

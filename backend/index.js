@@ -14,9 +14,7 @@ const port = 5000;
 // use cors as a middleware
 app.use(
   cors({
-    //origin: ["http://localhost:3000"],
-        origin: true,//accept from any frontend
-
+    origin: true,
   })
 );
 app.get("/", (req, res) => {

@@ -9,6 +9,7 @@ import {
   IconDashboard,
   IconUser,
   IconSettings,
+  IconClock,
 } from '@tabler/icons-react';
 import classes from './NavbarSimple.module.css';
 import { useRouter } from 'next/navigation';
@@ -23,6 +24,7 @@ const employeeNav=[
   {link:'/employee',label:' Dashboard',icon:IconDashboard},
   {link:'/employee/tasks',label:' Tasks',icon:IconChecklist},
   {link:'/employee/work-sessions',label:' Work Sessions',icon:IconUsersGroup},
+  {link:'/employee/clocky',label:' Clocky',icon:IconClock},
 ]
 export function NavbarSimple({ userType }) {
   const [active, setActive] = useState('Billing');

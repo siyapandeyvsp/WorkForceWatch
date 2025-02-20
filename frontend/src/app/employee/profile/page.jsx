@@ -27,26 +27,26 @@
 //       <Tabs.Panel value="General">
 //       <Paper p="sm" shadow="xs" w={500}>
 //         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-//           <Avatar src={employee.avatar} w={200} h={200}  />
+//           <Avatar src={employee?.avatar} w={200} h={200}  />
 //         </div>
 //         <TextInput
 //           label="Name"
 //           placeholder="Enter name"
-//           value={employee.name}
+//           value={employee?.name}
 //           name="name"
 //           onChange={handleInputChange}
 //         />
 //         <TextInput
 //           label="Designation"
 //           placeholder="Enter designation"
-//           value={employee.designation}
+//           value={employee?.designation}
 //           name="designation"
 //           onChange={handleInputChange}
 //         />
 //         <TextInput
 //           label="Email"
 //           placeholder="Enter email"
-//           value={employee.email}
+//           value={employee?.email}
 //           name="email"
 //           onChange={handleInputChange}
 //         />
@@ -60,14 +60,14 @@
 //         <TextInput
 //           label="Phone"
 //           placeholder="Enter phone"
-//           value={employee.phone}
+//           value={employee?.phone}
 //           name="phone"
 //           onChange={handleInputChange}
 //         />
 //         <TextInput
 //           label="Address"
 //           placeholder="Enter address"
-//           value={employee.address}
+//           value={employee?.address}
 //           name="address"
 //           onChange={handleInputChange}
 //         />
@@ -81,14 +81,14 @@
 //         <TextInput
 //           label="Degree"
 //           placeholder="Enter degree"
-//           value={employee.degree}
+//           value={employee?.degree}
 //           name="degree"
 //           onChange={handleInputChange}
 //         />
 //         <TextInput
 //           label="Institution"
 //           placeholder="Enter institution"
-//           value={employee.institution}
+//           value={employee?.institution}
 //           name="institution"
 //           onChange={handleInputChange}
 //         />
@@ -102,14 +102,14 @@
 //         <TextInput
 //           label="Account Number"
 //           placeholder="Enter account number"
-//           value={employee.accountNumber}
+//           value={employee?.accountNumber}
 //           name="accountNumber"
 //           onChange={handleInputChange}
 //         />
 //         <TextInput
 //           label="Bank Name"
 //           placeholder="Enter bank name"
-//           value={employee.bankName}
+//           value={employee?.bankName}
 //           name="bankName"
 //           onChange={handleInputChange}
 //         />
@@ -123,14 +123,14 @@
 //         <TextInput
 //           label="Salary"
 //           placeholder="Enter salary"
-//           value={employee.salary}
+//           value={employee?.salary}
 //           name="salary"
 //           onChange={handleInputChange}
 //         />
 //         <TextInput
 //           label="Tax"
 //           placeholder="Enter tax"
-//           value={employee.tax}
+//           value={employee?.tax}
 //           name="tax"
 //           onChange={handleInputChange}
 //         />
@@ -148,7 +148,7 @@
 
 // export default EmployeeProfile;
 import React, { useEffect, useState } from 'react';
-import { Paper, Stack ,Image , TextInput, Avatar, Button, Container, Tabs, Group, Grid, Notification, Text } from '@mantine/core';
+import { Paper, Stack ,Image , TextInput, Avatar, Button, Container, Tabs, Group, Grid, Notification, Text,Divider } from '@mantine/core';
 import { IconEdit, IconCheck, IconX } from '@tabler/icons-react';
 import axios from 'axios';
 import useAppContext from "@/context/AppContext";
@@ -173,7 +173,7 @@ const EmployeeProfile = () => {
   }
   useEffect(() => {
     const fetchEmployeeData = async () => {
-      const response = await axiosInstance.get(`/employee/getbyid/${employee._id}`);
+      const response = await axiosInstance.get(`/employee/getbyid/${employee?._id}`);
       setEmployee({ ...employee, ...response.data });
     };
   
@@ -186,7 +186,7 @@ const EmployeeProfile = () => {
 
   const handleUpdateProfile = async (section) => {
     axiosInstance.put(
-      `/employee/update/${employee._id}`,
+      `/employee/update/${employee?._id}`,
       employee,
       {
         headers: {
@@ -208,7 +208,7 @@ const EmployeeProfile = () => {
   };
 
   return (
-    <Container p="sm">
+    <Container p="md">
       {notification.visible && (
         <Notification
           color={notification.type === 'success' ? 'green' : 'red'}
@@ -218,20 +218,20 @@ const EmployeeProfile = () => {
           {notification.message}
         </Notification>
       )}
-<Paper withBorder shadow='xl' radius={5} p={15}>
-  <Group>
-    <Image src={employee.avatar} alt="Employee Avatar" w={150}   radius={50}/>
-    <Stack >
-    <Text size='xl' >{employee.name}</Text>
-    <Text>{employee.designation}</Text>
-    <Text>{employee.email}</Text>
-    </Stack>
-  </Group>
-</Paper>
+      <Paper withBorder shadow="xl" radius="md" p="md" mb="lg">
+        <Group>
+          <Avatar src={employee?.avatar} size={150} radius="xl" />
+          <Stack spacing="xs">
+            <Text size="xl" weight={500}>{employee?.name}</Text>
+            <Text color="dimmed">{employee?.designation}</Text>
+            <Text color="dimmed">{employee?.email}</Text>
+          </Stack>
+        </Group>
+      </Paper>
 
 
-      <Tabs defaultValue="General" mt={50}>
-        <Tabs.List>
+      <Tabs defaultValue="General" mt="lg">
+        <Tabs.List grow>
           <Tabs.Tab value="General">General</Tabs.Tab>
           <Tabs.Tab value="Contact">Contact</Tabs.Tab>
           <Tabs.Tab value="Qualification">Qualification</Tabs.Tab>
@@ -240,18 +240,19 @@ const EmployeeProfile = () => {
         </Tabs.List>
 
         {/* General Tab */}
-        <Tabs.Panel value="General">
-          <Paper p="sm" shadow="xs">
-            <Group position="apart">
-              <Text>General Information</Text>
+        <Tabs.Panel value="General" pt="md">
+          <Paper p="md" shadow="xs" radius="md">
+            <Group position="apart" mb="md">
+              <Text weight={500}>General Information</Text>
               <IconEdit size={20} onClick={() => handleEdit('General')} style={{ cursor: 'pointer' }} />
             </Group>
+            <Divider mb="md" />
             <Grid>
               <Grid.Col span={6}>
                 <TextInput
                   label=" Name"
                   placeholder="Enter name"
-                  value={employee.name}
+                  value={employee?.name}
                   name="name"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -262,7 +263,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Father's Name"
                   placeholder="Enter father's name"
-                  value={employee.fathersName}
+                  value={employee?.fathersName}
                   name="fathersName"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -272,7 +273,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Mother's Name"
                   placeholder="Enter mother's name"
-                  value={employee.mothersName}
+                  value={employee?.mothersName}
                   name="mothersName"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -282,7 +283,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="DOB"
                   placeholder="Enter date of birth"
-                  value={employee.dob}
+                  value={employee?.dob}
                   name="dob"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -292,7 +293,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Age"
                   placeholder="Enter age"
-                  value={employee.age}
+                  value={employee?.age}
                   name="age"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -302,7 +303,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Blood Group"
                   placeholder="Enter blood group"
-                  value={employee.bloodGroup}
+                  value={employee?.bloodGroup}
                   name="bloodGroup"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -312,7 +313,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Marital Status"
                   placeholder="Enter marital status"
-                  value={employee.maritalStatus}
+                  value={employee?.maritalStatus}
                   name="maritalStatus"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -322,7 +323,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Gender"
                   placeholder="Enter gender"
-                  value={employee.gender}
+                  value={employee?.gender}
                   name="gender"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -332,7 +333,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Employee ID"
                   placeholder="Enter employee ID"
-                  value={employee._id}
+                  value={employee?._id}
                   name="employeeId"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -342,7 +343,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Category"
                   placeholder="Enter category"
-                  value={employee.category}
+                  value={employee?.category}
                   name="category"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -352,7 +353,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Employment Type"
                   placeholder="Enter employment type"
-                  value={employee.employmentType}
+                  value={employee?.employmentType}
                   name="employmentType"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -362,7 +363,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Religion"
                   placeholder="Enter religion"
-                  value={employee.religion}
+                  value={employee?.religion}
                   name="religion"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -372,7 +373,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Date of Joining"
                   placeholder="Enter date of joining"
-                  value={employee.dateOfJoining}
+                  value={employee?.dateOfJoining}
                   name="dateOfJoining"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -382,7 +383,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Probation (months)"
                   placeholder="Enter probation period"
-                  value={employee.probationMonths}
+                  value={employee?.probationMonths}
                   name="probationMonths"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -392,7 +393,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Date of Confirmation"
                   placeholder="Enter date of confirmation"
-                  value={employee.dateOfConfirmation}
+                  value={employee?.dateOfConfirmation}
                   name="dateOfConfirmation"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -402,7 +403,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Official Email"
                   placeholder="Enter official email"
-                  value={employee.officialEmail}
+                  value={employee?.officialEmail}
                   name="officialEmail"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -412,7 +413,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Written Language"
                   placeholder="Enter written language"
-                  value={employee.writtenLanguage}
+                  value={employee?.writtenLanguage}
                   name="writtenLanguage"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -422,7 +423,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Spoken Language"
                   placeholder="Enter spoken language"
-                  value={employee.spokenLanguage}
+                  value={employee?.spokenLanguage}
                   name="spokenLanguage"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -432,7 +433,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Mother Tongue"
                   placeholder="Enter mother tongue"
-                  value={employee.motherTongue}
+                  value={employee?.motherTongue}
                   name="motherTongue"
                   onChange={handleInputChange}
                   disabled={!isEditing.General}
@@ -450,18 +451,19 @@ const EmployeeProfile = () => {
         </Tabs.Panel>
 
         {/* Contact Tab */}
-        <Tabs.Panel value="Contact">
-          <Paper p="sm" shadow="xs">
-            <Group position="apart">
-              <Text>Contact Information</Text>
+        <Tabs.Panel value="Contact" pt="md">
+          <Paper p="md" shadow="xs" radius="md">
+            <Group position="apart" mb="md">
+              <Text weight={500}>Contact Information</Text>
               <IconEdit size={20} onClick={() => handleEdit('Contact')} style={{ cursor: 'pointer' }} />
             </Group>
+            <Divider mb="md" />
             <Grid>
               <Grid.Col span={6}>
                 <TextInput
                   label="House Number"
                   placeholder="Enter house number"
-                  value={employee.houseNumber}
+                  value={employee?.houseNumber}
                   name="houseNumber"
                   onChange={handleInputChange}
                   disabled={!isEditing.Contact}
@@ -471,7 +473,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Area/Street/Village"
                   placeholder="Enter area/street/village"
-                  value={employee.area}
+                  value={employee?.area}
                   name="area"
                   onChange={handleInputChange}
                   disabled={!isEditing.Contact}
@@ -481,7 +483,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Town/City"
                   placeholder="Enter town/city"
-                  value={employee.townCity}
+                  value={employee?.townCity}
                   name="townCity"
                   onChange={handleInputChange}
                   disabled={!isEditing.Contact}
@@ -491,7 +493,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="District"
                   placeholder="Enter district"
-                  value={employee.district}
+                  value={employee?.district}
                   name="district"
                   onChange={handleInputChange}
                   disabled={!isEditing.Contact}
@@ -501,7 +503,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Country"
                   placeholder="Enter country"
-                  value={employee.country}
+                  value={employee?.country}
                   name="country"
                   onChange={handleInputChange}
                   disabled={!isEditing.Contact}
@@ -511,7 +513,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="State"
                   placeholder="Enter state"
-                  value={employee.state}
+                  value={employee?.state}
                   name="state"
                   onChange={handleInputChange}
                   disabled={!isEditing.Contact}
@@ -521,7 +523,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Pincode"
                   placeholder="Enter pincode"
-                  value={employee.pincode}
+                  value={employee?.pincode}
                   name="pincode"
                   onChange={handleInputChange}
                   disabled={!isEditing.Contact}
@@ -531,7 +533,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Contact Number"
                   placeholder="Enter contact number"
-                  value={employee.contactNumber}
+                  value={employee?.contactNumber}
                   name="contactNumber"
                   onChange={handleInputChange}
                   disabled={!isEditing.Contact}
@@ -541,7 +543,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Emergency Number"
                   placeholder="Enter emergency number"
-                  value={employee.emergencyNumber}
+                  value={employee?.emergencyNumber}
                   name="emergencyNumber"
                   onChange={handleInputChange}
                   disabled={!isEditing.Contact}
@@ -551,7 +553,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Personal Email"
                   placeholder="Enter personal email"
-                  value={employee.personalEmail}
+                  value={employee?.personalEmail}
                   name="personalEmail"
                   onChange={handleInputChange}
                   disabled={!isEditing.Contact}
@@ -569,18 +571,19 @@ const EmployeeProfile = () => {
         </Tabs.Panel>
 
         {/* Qualification Tab */}
-        <Tabs.Panel value="Qualification">
-          <Paper p="sm" shadow="xs">
-            <Group position="apart">
-              <Text>Qualification Details</Text>
+        <Tabs.Panel value="Qualification" pt="md">
+          <Paper p="md" shadow="xs" radius="md">
+            <Group position="apart" mb="md">
+              <Text weight={500}>Qualification Details</Text>
               <IconEdit size={20} onClick={() => handleEdit('Qualification')} style={{ cursor: 'pointer' }} />
             </Group>
+            <Divider mb="md" />
             <Grid>
               <Grid.Col span={6}>
                 <TextInput
                   label="High School Percentage"
                   placeholder="Enter high school percentage"
-                  value={employee.highSchoolPercentage}
+                  value={employee?.highSchoolPercentage}
                   name="highSchoolPercentage"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -590,7 +593,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="High School Name"
                   placeholder="Enter high school name"
-                  value={employee.highSchoolName}
+                  value={employee?.highSchoolName}
                   name="highSchoolName"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -600,7 +603,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="High School Board"
                   placeholder="Enter high school board"
-                  value={employee.highSchoolBoard}
+                  value={employee?.highSchoolBoard}
                   name="highSchoolBoard"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -610,7 +613,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Intermediate Percentage"
                   placeholder="Enter intermediate percentage"
-                  value={employee.intermediatePercentage}
+                  value={employee?.intermediatePercentage}
                   name="intermediatePercentage"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -620,7 +623,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Intermediate School"
                   placeholder="Enter intermediate school"
-                  value={employee.intermediateSchool}
+                  value={employee?.intermediateSchool}
                   name="intermediateSchool"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -630,7 +633,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Intermediate Board"
                   placeholder="Enter intermediate board"
-                  value={employee.intermediateBoard}
+                  value={employee?.intermediateBoard}
                   name="intermediateBoard"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -640,7 +643,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Graduation Degree"
                   placeholder="Enter graduation degree"
-                  value={employee.graduationDegree}
+                  value={employee?.graduationDegree}
                   name="graduationDegree"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -650,7 +653,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Graduation Percentage/CGPA"
                   placeholder="Enter graduation percentage/CGPA"
-                  value={employee.graduationPercentage}
+                  value={employee?.graduationPercentage}
                   name="graduationPercentage"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -660,7 +663,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Post Graduation Degree"
                   placeholder="Enter post graduation degree"
-                  value={employee.postGraduationDegree}
+                  value={employee?.postGraduationDegree}
                   name="postGraduationDegree"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -670,7 +673,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Post Graduation Percentage/CGPA"
                   placeholder="Enter post graduation percentage/CGPA"
-                  value={employee.postGraduationPercentage}
+                  value={employee?.postGraduationPercentage}
                   name="postGraduationPercentage"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -680,7 +683,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Additional Certifications"
                   placeholder="Enter additional certifications"
-                  value={employee.additionalCertifications}
+                  value={employee?.additionalCertifications}
                   name="additionalCertifications"
                   onChange={handleInputChange}
                   disabled={!isEditing.Qualification}
@@ -698,18 +701,19 @@ const EmployeeProfile = () => {
         </Tabs.Panel>
 
         {/* Bank Tab */}
-        <Tabs.Panel value="Bank">
-          <Paper p="sm" shadow="xs">
-            <Group position="apart">
-              <Text>Bank Details</Text>
+        <Tabs.Panel value="Bank" pt="md">
+          <Paper p="md" shadow="xs" radius="md">
+            <Group position="apart" mb="md">
+              <Text weight={500}>Bank Details</Text>
               <IconEdit size={20} onClick={() => handleEdit('Bank')} style={{ cursor: 'pointer' }} />
             </Group>
+            <Divider mb="md" />
             <Grid>
               <Grid.Col span={6}>
                 <TextInput
                   label="Account Number"
                   placeholder="Enter account number"
-                  value={employee.accountNumber}
+                  value={employee?.accountNumber}
                   name="accountNumber"
                   onChange={handleInputChange}
                   disabled={!isEditing.Bank}
@@ -719,7 +723,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Bank Name"
                   placeholder="Enter bank name"
-                  value={employee.bankName}
+                  value={employee?.bankName}
                   name="bankName"
                   onChange={handleInputChange}
                   disabled={!isEditing.Bank}
@@ -729,7 +733,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Bank Branch"
                   placeholder="Enter bank branch"
-                  value={employee.bankBranch}
+                  value={employee?.bankBranch}
                   name="bankBranch"
                   onChange={handleInputChange}
                   disabled={!isEditing.Bank}
@@ -739,7 +743,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="IFSC Code"
                   placeholder="Enter IFSC code"
-                  value={employee.ifscCode}
+                  value={employee?.ifscCode}
                   name="ifscCode"
                   onChange={handleInputChange}
                   disabled={!isEditing.Bank}
@@ -757,18 +761,19 @@ const EmployeeProfile = () => {
         </Tabs.Panel>
 
         {/* Payroll Tab */}
-        <Tabs.Panel value="Payroll">
-          <Paper p="sm" shadow="xs">
-            <Group position="apart">
-              <Text>Payroll Details</Text>
+        <Tabs.Panel value="Payroll" pt="md">
+          <Paper p="md" shadow="xs" radius="md">
+            <Group position="apart" mb="md">
+              <Text weight={500}>Payroll Details</Text>
               <IconEdit size={20} onClick={() => handleEdit('Payroll')} style={{ cursor: 'pointer' }} />
             </Group>
+            <Divider mb="md" />
             <Grid>
               <Grid.Col span={6}>
                 <TextInput
                   label="Gross Salary"
                   placeholder="Enter gross salary"
-                  value={employee.grossSalary}
+                  value={employee?.grossSalary}
                   name="grossSalary"
                   onChange={handleInputChange}
                   disabled={!isEditing.Payroll}
@@ -778,7 +783,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Basic Salary"
                   placeholder="Enter basic salary"
-                  value={employee.basicSalary}
+                  value={employee?.basicSalary}
                   name="basicSalary"
                   onChange={handleInputChange}
                   disabled={!isEditing.Payroll}
@@ -788,7 +793,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="HRA"
                   placeholder="Enter HRA"
-                  value={employee.hra}
+                  value={employee?.hra}
                   name="hra"
                   onChange={handleInputChange}
                   disabled={!isEditing.Payroll}
@@ -798,7 +803,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="DA"
                   placeholder="Enter DA"
-                  value={employee.da}
+                  value={employee?.da}
                   name="da"
                   onChange={handleInputChange}
                   disabled={!isEditing.Payroll}
@@ -808,7 +813,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Tax Deductions"
                   placeholder="Enter tax deductions"
-                  value={employee.taxDeductions}
+                  value={employee?.taxDeductions}
                   name="taxDeductions"
                   onChange={handleInputChange}
                   disabled={!isEditing.Payroll}
@@ -818,7 +823,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Employee EPF"
                   placeholder="Enter employee EPF"
-                  value={employee.employeeEpf}
+                  value={employee?.employeeEpf}
                   name="employeeEpf"
                   onChange={handleInputChange}
                   disabled={!isEditing.Payroll}
@@ -828,7 +833,7 @@ const EmployeeProfile = () => {
                 <TextInput
                   label="Employee ESIC"
                   placeholder="Enter employee ESIC"
-                  value={employee.employeeEsic}
+                  value={employee?.employeeEsic}
                   name="employeeEsic"
                   onChange={handleInputChange}
                   disabled={!isEditing.Payroll}

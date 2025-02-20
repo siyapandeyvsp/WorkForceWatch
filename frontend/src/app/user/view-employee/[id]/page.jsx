@@ -32,6 +32,7 @@ const ViewEmployee = () => {
   const [data, setData] = useState([]);
   const [tasks, setTasks] = useState([]);
 const [workSessions, setWorkSessions] = useState([{}]);
+const [assignments,setAssignments]=useState([]);
   const { id } = useParams();
 
   const { axiosInstance } = useAppContext();
@@ -54,7 +55,7 @@ const [workSessions, setWorkSessions] = useState([{}]);
     const fetchAssignments = async () => {
       const response = await axiosInstance.get(`/assignment/getbyemployee/${id}`);
       console.log(response.data);
-      setTasks(response.data);
+      setAssignments(response.data);
     };
   
     fetchAssignments();
@@ -107,6 +108,7 @@ const [workSessions, setWorkSessions] = useState([{}]);
   //   },
   //   // ... rest of the tasks
   // ];
+  console.log("TASKS",tasks)
   return (
     <Paper p={50} shadow="xs">
         <Group justify="space-between">
@@ -198,7 +200,7 @@ const [workSessions, setWorkSessions] = useState([{}]);
         <Title order={4} ta="center" >Tasks </Title>
         <Group>
         {/* {tasks.map(task => <TaskCard key={task._id} task={task} />)} */}
-        {tasks.map(({task, createdAt}) => <TaskCard key={task._id} task={task} />)}
+        {/* {tasks.map(({task, createdAt}) => <TaskCard key={task} task={task} />)} */}
         </Group>
         </Paper>
       </Stack>

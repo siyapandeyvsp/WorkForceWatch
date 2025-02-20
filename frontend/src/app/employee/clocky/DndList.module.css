@@ -1,0 +1,39 @@
+.item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.itemDragging {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.symbol {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.textRight {
+  text-align: right;
+}
+
+.labelSmallGray {
+  font-size: 12px;
+  color: gray;
+}
+
+.inputSmall {
+  width: auto;
+  min-width: 60px;
+  text-align: right;
+}
+
+.highlighted {
+  background-color: #e0f7fa;
+}

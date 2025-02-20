@@ -1,21 +1,34 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextInput, Textarea, Select, Button, Paper } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import axios from 'axios';
 
-const AddTaskForm = ({ employeeId = '',assigned=false }) => {
+const AddTaskForm = ({ employeeId = '', assigned = false }) => {
   const [tasks, setTasks] = useState([]);
-    const [currentUser, setCurrentUser] = useState(
-        JSON.parse(sessionStorage.getItem('user'))
-    );
+  const [employees, setEmployees] = useState([]);
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(sessionStorage.getItem('user'))
+  );
 
-    const fetchTasks = async () => {
-      const response = await axios.get("http://localhost:5000/task/getall");
-      console.log(response.data)
-      setTasks(response.data);
-    };
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  const fetchEmployees = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/employee/getall");
+      setEmployees(response.data);
+    } catch (error) {
+      console.error("Failed to fetch employees", error);
+    }
+  };
+
+  const fetchTasks = async () => {
+    const response = await axios.get("http://localhost:5000/task/getall");
+    setTasks(response.data);
+  };
 
   const form = useForm({
     initialValues: {
@@ -23,18 +36,16 @@ const AddTaskForm = ({ employeeId = '',assigned=false }) => {
       description: '',
       priority: '',
       status: '',
-      assignedTo:employeeId,
-      assigned:assigned
-     
+      assignedTo: employeeId,
+      assigned: assigned
     },
 
-    validationRules: {
-      taskName: (value) => value.trim().length > 0,
+    validate: {
+      taskName: (value) => value.trim().length > 0 ? null : 'Task name is required',
     },
   });
 
   const taskSubmit = (values) => {
-    console.log(values);
     axios.post('http://localhost:5000/task/add', values, {
       headers: {
         'Content-Type': 'application/json',
@@ -42,16 +53,14 @@ const AddTaskForm = ({ employeeId = '',assigned=false }) => {
       }
     })
     .then((res) => {
-      console.log(res.status);
-      if(res.status === 200){
+      if (res.status === 200) {
         fetchTasks();
         notifications.show({ title: 'Success', message: 'Task added successfully' });
-      }else{
+      } else {
         notifications.show({ title: 'Error', message: 'Failed to add task' });
       }
-      
     }).catch((err) => {
-      console.log(err);
+      console.error(err);
       notifications.show({ title: 'Error', message: 'Failed to add task' });
     });
   }
@@ -70,9 +79,10 @@ const AddTaskForm = ({ employeeId = '',assigned=false }) => {
           placeholder="Enter task description"
           {...form.getInputProps('description')}
         />
-        <TextInput
+        <Select
           label="Assigned To"
-          placeholder="Enter user ID"
+          placeholder="Select employee"
+          data={employees.filter(employee => employee && employee._id && employee.name).map(employee => ({ value: employee._id, label: employee.name }))}
           {...form.getInputProps('assignedTo')}
         />
         <Select
@@ -87,7 +97,6 @@ const AddTaskForm = ({ employeeId = '',assigned=false }) => {
           placeholder="Select status"
           {...form.getInputProps('status')}
         />
-       
         <Button type="submit" color="blue" fullWidth>
           Add Task
         </Button>
