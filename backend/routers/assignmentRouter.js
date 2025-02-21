@@ -17,7 +17,7 @@ router.post("/add", verifyToken, (req, res) => {
 });
 
 router.get("/getall", (req, res) => {
-  Model.find()
+  Model.find().sort({ createdAt: -1 })
     .then((result) => {
       res.status(200).json({ message: "Assignments fetched successfully", data:result });
     })
@@ -55,13 +55,14 @@ router.get('/getbyemployee/:id', (req, res) => {
       path: 'task',
       populate: {
         path: 'assignedBy',
-        model: 'UserCollection',
-        select: 'email name avatar companyId role createdAt' // Explicitly specify the fields to be selected
+        model: 'UserCollection',        
       }
     })
     .then((result) => {
       console.log("assignmentRouter getbyemployee", result);
-      res.status(200).json({ message: "Assignments fetched successfully", result });
+      const filteredResult = result.filter(assignment => assignment.task !== null);
+
+      res.status(200).json({ message: "Assignments fetched successfully", result: filteredResult });
     }).catch((err) => {
       console.log(err);
       res.status(500).json({ message: "Failed to fetch assignments", error: err });

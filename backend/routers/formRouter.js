@@ -61,7 +61,7 @@ router.get("/get", async (req, res) => {
 router.put("/update/:id", (req, res) => {
   Model.findByIdAndUpdate(req.params.id, req.body)
     .then((result) => {
-      res.status(200).json({ status: 200, message: "Form updated successfully", result });
+      res.status(200).json({ status: 200, message: "Form updated successfully" });
       console.log(result);
     }).catch((err) => {
       console.log(err);
@@ -72,7 +72,7 @@ router.put("/update/:id", (req, res) => {
 router.delete("/delete/:id", (req, res) => {
   Model.findByIdAndDelete(req.params.id)
     .then((result) => {
-      res.status(200).json({ status: 200, message: "Form deleted successfully", result });
+      res.status(200).json({ status: 200, message: "Form deleted successfully" });
     })
     .catch((err) => {
       console.log(err);

@@ -9,8 +9,8 @@ import {
   Divider,
   TextInput,
   Button,
-  showNotification
 } from "@mantine/core";
+import { showNotification } from '@mantine/notifications';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -29,27 +29,34 @@ const formatDuration = (duration) => {
 };
 
 const formatTime = (time) => {
-  return time ? new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "00:00";
+  console.log("TIME", time);
+  return time ? new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit',second:'2-digit', hour12: false }) : "00:00";
 };
 
 const Clocky = () => {
   const [employee, setEmployee] = useState(
     JSON.parse(sessionStorage.getItem("employee"))
   );
-  const [tasks, setTasks] = useState([]);
-  const [activeTask, setActiveTask] = useState(null);
+  const [assignments, setAssignments] = useState([]);
+  const [activeAssignment, setActiveAssignment] = useState(null);
   const { axiosInstance } = useAppContext();
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      const response = await axiosInstance.get(
-        `/assignment/getbyemployee/${employee?._id}`
-      );
-      console.log(response.data.result);
-      setTasks(response.data.result || []);
+    const fetchAssignments = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/assignment/getbyemployee/${employee?._id}`
+        );
+        console.log("RES /assignment/getbyemployee/${employee/_id}", response.data);
+        setAssignments(response.data.result || []);
+        // showNotification({ message: "Assignments fetched successfully", color: "green" });
+      } catch (error) {
+        console.error("Failed to fetch assignments", error);
+        showNotification({ message: "Failed to fetch assignments", color: "red" });
+      }
     };
 
-    fetchTasks();
+    fetchAssignments();
   }, []);
 
   const onDragEnd = (result) => {
@@ -57,73 +64,79 @@ const Clocky = () => {
 
     const { source, destination } = result;
 
-    const reorderedTasks = Array.from(tasks);
-    const [movedTask] = reorderedTasks.splice(source.index, 1);
-    reorderedTasks.splice(destination.index, 0, movedTask);
+    const reorderedAssignments = Array.from(assignments);
+    const [movedAssignment] = reorderedAssignments.splice(source.index, 1);
+    reorderedAssignments.splice(destination.index, 0, movedAssignment);
 
-    setTasks(reorderedTasks);
+    setAssignments(reorderedAssignments);
   };
 
-  const handleStatusChange = async (task, newStatus) => {
-    if (!task || !task._id) return;
-    const updatedTask = {
-      ...task,
+  const handleStatusChange = async (assignment, newStatus) => {
+    if (!assignment || !assignment._id) return;
+    const updatedAssignment = {
+      ...assignment,
       task: {
-        ...task.task,
+        ...assignment.task,
         status: newStatus
       }
     };
 
     try {
-      const response = await axiosInstance.put(`/assignment/update/${task._id}`, updatedTask);
-      setTasks(tasks.map(t => t._id === task._id ? response.data.result : t));
-      showNotification({ message: "Status has been updated" });
+      const response = await axiosInstance.put(`/assignment/update/${assignment._id}`, updatedAssignment);
+      setAssignments(assignments.map(a => a._id === assignment._id ? response.data.result : a));
+      showNotification({ message: "Status has been updated", color: "green" });
     } catch (error) {
       console.error("Failed to update task status", error);
+      showNotification({ message: "Failed to update status", color: "red" });
     }
   };
 
-  const handleFieldChange = async (task, field, value) => {
-    if (!task || !task._id) return;
-    const updatedTask = {
-      ...task,
+  const handleFieldChange = async (assignment, field, value) => {
+    if (!assignment || !assignment._id) return;
+    const updatedAssignment = {
+      ...assignment,
       task: {
-        ...task.task,
+        ...assignment.task,
         [field]: value
       }
     };
 
     try {
-      const response = await axiosInstance.put(`/assignment/update/${task._id}`, updatedTask);
-      setTasks(tasks.map(t => t._id === task._id ? response.data.result.result : t));
-      showNotification({ message: `${field.charAt(0).toUpperCase() + field.slice(1)} has been updated` });
+      const response = await axiosInstance.put(`/assignment/update/${assignment._id}`, updatedAssignment);
+      setAssignments(assignments.map(a => a._id === assignment._id ? response.data.result.result : a));
+      showNotification({ message: `${field.charAt(0).toUpperCase() + field.slice(1)} has been updated`, color: "green" });
     } catch (error) {
       console.error(`Failed to update task ${field}`, error);
+      showNotification({ message: `Failed to update ${field}`, color: "red" });
     }
   };
 
   const startTask = async (taskId) => {
     try {
       const response = await axiosInstance.put(`task/start/${taskId}`);
+      showNotification({ message: "Task has been started", color: "green" });
       return response.data.result.startTime;
     } catch (err) {
       console.error("Failed to start task:", err);
+      showNotification({ message: "Failed to start task", color: "red" });
     }
   };
 
   const stopTask = async (taskId) => {
     try {
       const response = await axiosInstance.put(`task/stop/${taskId}`);
+      showNotification({ message: "Task has been stopped", color: "green" });
       return {
         endTime: response.data.result.endTime,
         duration: response.data.result.duration
       };
     } catch (err) {
       console.error("Failed to stop task:", err);
+      showNotification({ message: "Failed to stop task", color: "red" });
     }
   };
 
-  const sortedTasks = tasks.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+  const sortedAssignments = assignments.sort((a, b) => new Date(b.task.startTime) - new Date(a.task.startTime));
 
   return (
     <Container size="xl" padding="md">
@@ -132,9 +145,9 @@ const Clocky = () => {
           Assigned Tasks
         </Title>
         <Divider my="sm" />
-        <TaskListItem task={activeTask || { task: {} }} index={-1} handleStatusChange={handleStatusChange} handleFieldChange={handleFieldChange} startTask={startTask} stopTask={stopTask} setActiveTask={setActiveTask} setTasks={setTasks} />
+        <TaskListItem assignment={activeAssignment || { task: {} }} index={-1} handleStatusChange={handleStatusChange} handleFieldChange={handleFieldChange} startTask={startTask} stopTask={stopTask} setActiveAssignment={setActiveAssignment} setAssignments={setAssignments} />
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="tasks">
+          <Droppable droppableId="assignments">
             {(provided) => (
               <div
                 ref={provided.innerRef}
@@ -146,8 +159,8 @@ const Clocky = () => {
                   borderRadius: '8px',
                 }}
               >
-                {sortedTasks.map((task, index) => (
-                  <TaskListItem key={task._id} task={task} index={index} handleStatusChange={handleStatusChange} handleFieldChange={handleFieldChange} startTask={startTask} stopTask={stopTask} setActiveTask={setActiveTask} setTasks={setTasks} />
+                {sortedAssignments.map((assignment, index) => (
+                  <TaskListItem key={assignment._id} assignment={assignment} index={index} handleStatusChange={handleStatusChange} handleFieldChange={handleFieldChange} startTask={startTask} stopTask={stopTask} setActiveAssignment={setActiveAssignment} setAssignments={setAssignments} />
                 ))}
                 {provided.placeholder}
               </div>
@@ -159,14 +172,17 @@ const Clocky = () => {
   );
 };
 
-const TaskListItem = ({ task, index, handleStatusChange, handleFieldChange, startTask, stopTask, setActiveTask, setTasks }) => {
+const TaskListItem = ({ assignment, index, handleStatusChange, handleFieldChange, startTask, stopTask, setActiveAssignment, setAssignments }) => {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [startTime, setStartTime] = useState(task?.startTime);
-  const [endTime, setEndTime] = useState(task?.endTime);
-  const [duration, setDuration] = useState(task?.duration);
+  const [startTime, setStartTime] = useState(assignment?.task?.startTime);
+  const [endTime, setEndTime] = useState(assignment?.task?.endTime);
+  const [duration, setDuration] = useState(assignment?.task?.duration || 0); // Ensure duration is a number
   const [timer, setTimer] = useState(null);
 
   useEffect(() => {
+    console.log("ASSIGNMENT", assignment);
+    console.log("TIMER RUNNING", isTimerRunning);
+    console.log("START TIME", startTime);
     if (isTimerRunning && startTime) {
       const interval = setInterval(() => {
         setDuration(Date.now() - new Date(startTime).getTime());
@@ -196,8 +212,8 @@ const TaskListItem = ({ task, index, handleStatusChange, handleFieldChange, star
     >
       <TextInput
         label="Task Name"
-        value={task?.task?.taskName || ""}
-        onChange={(e) => handleFieldChange(task, "taskName", e.currentTarget.value)}
+        value={assignment?.task?.taskName || ""}
+        onChange={(e) => handleFieldChange(assignment, "taskName", e.currentTarget.value)}
         className={classes.labelSmallGray}
         style={{ flex: 2 }}
       />
@@ -205,21 +221,21 @@ const TaskListItem = ({ task, index, handleStatusChange, handleFieldChange, star
         <TextInput
           label="Start Time"
           value={formatTime(startTime)}
-          onChange={(e) => handleFieldChange(task, "startTime", e.currentTarget.value)}
+          onChange={(e) => handleFieldChange(assignment, "startTime", e.currentTarget.value)}
           className={cx(classes.textRight, classes.inputSmall, classes.labelSmallGray)}
           style={{ flex: 1 }}
         />
         <TextInput
           label="End Time"
           value={formatTime(endTime)}
-          onChange={(e) => handleFieldChange(task, "endTime", e.currentTarget.value)}
+          onChange={(e) => handleFieldChange(assignment, "endTime", e.currentTarget.value)}
           className={cx(classes.textRight, classes.inputSmall, classes.labelSmallGray)}
           style={{ flex: 1 }}
         />
         <TextInput
           label="Duration"
           value={formatDuration(duration)}
-          onChange={(e) => handleFieldChange(task, "duration", e.currentTarget.value)}
+          onChange={(e) => handleFieldChange(assignment, "duration", e.currentTarget.value)}
           className={cx(classes.textRight, classes.inputSmall, classes.labelSmallGray)}
           style={{ flex: 1 }}
         />
@@ -230,20 +246,20 @@ const TaskListItem = ({ task, index, handleStatusChange, handleFieldChange, star
             color={isTimerRunning ? "red" : "green"}
             onClick={async () => {
               if (isTimerRunning) {
-                const { endTime, duration } = await stopTask(task?.task?._id) || {};
+                const { endTime, duration } = await stopTask(assignment?.task?._id) || {};
                 setEndTime(endTime);
                 setDuration(duration);
                 setIsTimerRunning(false);
                 clearInterval(timer);
-                setActiveTask(null);
+                setActiveAssignment(null);
               } else {
-                const newStartTime = await startTask(task?.task?._id);
+                const newStartTime = await startTask(assignment?.task?._id);
                 setStartTime(newStartTime);
                 setIsTimerRunning(true);
-                setActiveTask(task);
-                setTasks(prevTasks => {
-                  const updatedTasks = prevTasks.filter(t => t._id !== task._id);
-                  return [task, ...updatedTasks];
+                setActiveAssignment(assignment);
+                setAssignments(prevAssignments => {
+                  const updatedAssignments = prevAssignments.filter(a => a._id !== assignment._id);
+                  return [assignment, ...updatedAssignments];
                 });
               }
             }}
@@ -256,7 +272,7 @@ const TaskListItem = ({ task, index, handleStatusChange, handleFieldChange, star
   );
 
   return index === -1 ? taskContent : (
-    <Draggable key={task?._id} draggableId={task?._id} index={index}>
+    <Draggable key={assignment?._id} draggableId={assignment?._id} index={index}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
